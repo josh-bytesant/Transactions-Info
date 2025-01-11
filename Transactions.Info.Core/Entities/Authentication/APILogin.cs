@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Transactions.Info.Core.Entities.Authentication
 {
-    public class Login
+    public class APILogin
     {
         public string UserName { get; set; }
         public string Password { get; set; }
