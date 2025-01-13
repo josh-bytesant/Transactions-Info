@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
+using Transactions.Info.Extra.API.Helpers.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,8 +39,8 @@ builder.Services.AddEndpointsApiExplorer();
 //    config.ResolveConflictingActions(x => x.First());
 //});
 
-//builder.Services.AddAuthentication("BasicAuthentication")
-//    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+builder.Services.AddAuthentication("BasicAuthentication")
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
 var app = builder.Build();
 

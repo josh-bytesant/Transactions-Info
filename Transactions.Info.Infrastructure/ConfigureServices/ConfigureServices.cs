@@ -15,7 +15,10 @@ namespace Transactions.Info.Infrastructure.ConfigureServices
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            
+            services.AddDbContext<AccountInfoDbContext>(opt =>
+            {
+                opt.UseInMemoryDatabase(configuration.GetConnectionString("DefaultConnection"));
+            });
 
             return services;
         }
