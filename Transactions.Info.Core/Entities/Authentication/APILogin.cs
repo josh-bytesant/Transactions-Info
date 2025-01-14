@@ -10,7 +10,10 @@ namespace Transactions.Info.Core.Entities.Authentication
     public class APILogin
     {
         [Key]
+        [MaxLength(255)]
         public string UserName { get; set; }
+        [Required]
+        [MaxLength(255)]
         public string Password { get; set; }
     }
 }

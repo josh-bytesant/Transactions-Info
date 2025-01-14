@@ -1,0 +1,39 @@
+[
+  {
+    "IndustryId": 1,
+    "Field": "Invoice Number"
+  },
+  {
+    "UserName": 1,
+    "Key": "Quantity"
+  },
+  {
+    "IndustryId": 1,
+    "Field": "Delivery Address"
+  },
+  {
+    "IndustryId": 2,
+    "Field": "Matric Number"
+  },
+  {
+    "IndustryId": 2,
+    "Field": "Level"
+  },
+  {
+    "IndustryId": 2,
+    "Field": "Course"
+  },
+  {
+    "IndustryId": 3,
+    "Field": "GSM Number"
+  },
+  {
+    "IndustryId": 3,
+    "Field": "Network"
+  },
+  {
+    "IndustryId": 3,
+    "Field": "Residential Address"
+  }
+
+]

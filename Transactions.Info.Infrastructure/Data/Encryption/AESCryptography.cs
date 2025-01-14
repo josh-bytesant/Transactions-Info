@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
@@ -6,70 +7,79 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Transactions.Info.Core.Entities.Encryption;
+using Transactions.Info.Infrastructure.Data.DBContexts;
 
 namespace Transactions.Info.Infrastructure.Data.Encryption
 {
-    public static class AESCryptography
+    public  class AESCryptography
     {
-        static string GenerateKey()
+        private readonly AccountInfoDbContext _dbContext;
+ 
+        public AESCryptography(AccountInfoDbContext dbContext)
         {
-            
-            return Guid.NewGuid().ToString().Replace("-", "").Substring(16).ToUpper();
+            _dbContext = dbContext;
         }
-        static byte[] Encrypt(string plainText, string key)
+        private string GetOrGenerateKey(string userName)
         {
-            byte[] encrypted;
+            string key = string.Empty;
+            var dbResult = _dbContext.ApplicationUserKeys.FirstOrDefault(t => t.UserName == userName);
+            if (dbResult == null)
+            {
+                key = Guid.NewGuid().ToString().Replace("-", "").Substring(16).ToUpper();
+                var data = new ApplicationUserKey
+                {
+                    UserName = userName,
+                    Key = key
+                };
+                _dbContext.ApplicationUserKeys.Add(data);
+                _dbContext.SaveChanges();
+                return key;
+            }
+            key = dbResult.Key;
+            return key;
+        }
+        public string Encrypt(string plainText, string userName)
+        {
+            string key = GetOrGenerateKey(userName);
+            byte[] encryptedBytes = null;
             // Create a new AesManaged.
-            using (Aes aes =  Aes.Create())
+            byte[] clearBytes = Encoding.Unicode.GetBytes(plainText);
+            using (Aes aes = Aes.Create())
             {
-                aes.Padding = PaddingMode.PKCS7;
                 aes.Key = Encoding.UTF8.GetBytes(key);
-                byte[] iv = new byte[aes.IV.Length];
-                // Create encryptor
-                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, iv);
-                // Create MemoryStream
-                using (MemoryStream ms = new MemoryStream())
+                aes.IV = new byte[16];
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+
+                // Encrypt the input plaintext using the AES algorithm
+                using (ICryptoTransform encryptor = aes.CreateEncryptor())
                 {
-                    // Create crypto stream using the CryptoStream class. This class is the key to encryption
-                    // and encrypts and decrypts data from any given stream. In this case, we will pass a memory stream
-                    // to encrypt
-                    using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
-                    {
-                        byte[] input = Encoding.UTF8.GetBytes(plainText);
-                        cs.Write(input, 0, input.Length);
-                        encrypted = ms.ToArray();
-                    }
+                    encryptedBytes = encryptor.TransformFinalBlock(clearBytes, 0, clearBytes.Length);
                 }
             }
-            // Return encrypted data
-            return encrypted;
+
+            return Convert.ToBase64String(encryptedBytes);
         }
-        static string Decrypt(string cipherText, string key)
+        public string Decrypt(string cipherText, string userName)
         {
-            byte[] fullCipher = Convert.FromBase64String(cipherText);
-            string plaintext = null;
-            // Create AesManaged
-            using (Aes aes =  Aes.Create())
+            string key = GetOrGenerateKey(userName);
+            byte[] decryptedBytes = null;
+            byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            using (Aes aes = Aes.Create())
             {
-                aes.Padding = PaddingMode.PKCS7;
                 aes.Key = Encoding.UTF8.GetBytes(key);
-                byte[] iv = new byte[aes.IV.Length];
-                Array.Copy(fullCipher, 0, iv, 0, aes.IV.Length);
-                // Create a decryptor
-                ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, iv);
-                // Create the streams used for decryption.
-                using (MemoryStream ms = new MemoryStream())
+                aes.IV = new byte[16];
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+
+                // Decrypt the input ciphertext using the AES algorithm
+                using (ICryptoTransform decryptor = aes.CreateDecryptor())
                 {
-                    // Create crypto stream
-                    using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Write))
-                    {
-                        cs.Write(fullCipher, aes.IV.Length, fullCipher.Length -
-                                aes.IV.Length);
-                    }
-                    plaintext = Encoding.UTF8.GetString(ms.ToArray());
+                    decryptedBytes = decryptor.TransformFinalBlock(cipherBytes, 0, cipherBytes.Length);
                 }
             }
-            return plaintext;
+            return System.Text.Encoding.Unicode.GetString(decryptedBytes);
         }
     }
 }

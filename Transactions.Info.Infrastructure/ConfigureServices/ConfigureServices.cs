@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -7,7 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Transactions.Info.Core.Interfaces;
 using Transactions.Info.Infrastructure.Data.DBContexts;
+using Transactions.Info.Infrastructure.Data.Encryption;
+using Transactions.Info.Infrastructure.Data.Implementations;
 
 namespace Transactions.Info.Infrastructure.ConfigureServices
 {
@@ -17,9 +19,11 @@ namespace Transactions.Info.Infrastructure.ConfigureServices
         {
             services.AddDbContext<AccountInfoDbContext>(opt =>
             {
-                opt.UseInMemoryDatabase(configuration.GetConnectionString("DefaultConnection"));
+                opt.UseSqlServer(configuration.GetConnectionString("AccountInfoConnection"));
             });
-
+            services.AddScoped<AESCryptography>();
+            services.AddScoped<UserContextRepository>();
+            services.AddScoped<ICustomerAccountInfoRepository, CustomerAccountInfoRepository>();
             return services;
         }
     }

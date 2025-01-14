@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Transactions.Info.Web.BL;
 using Transactions.Info.Web.Models;
 
 namespace Transactions.Info.Web.Controllers
@@ -7,15 +8,21 @@ namespace Transactions.Info.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly AccountInfoBL _accountInfoBL;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, AccountInfoBL accountInfoBL)
         {
             _logger = logger;
+            _accountInfoBL = accountInfoBL;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var accountInfo = await _accountInfoBL.GetAccountInfo();
+            if (!accountInfo.Status) { }
+
+
+            return View(accountInfo.Data);
         }
 
         public IActionResult Privacy()

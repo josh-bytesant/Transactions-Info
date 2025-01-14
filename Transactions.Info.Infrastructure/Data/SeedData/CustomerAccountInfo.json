@@ -1,0 +1,14 @@
+[
+  {
+    "AccountNumber": "1234567890",
+    "IndustryId": 1
+  },
+  {
+    "AccountNumber": "2345678901",
+    "IndustryId": 2
+  },
+  {
+    "AccountNumber": "3456789012",
+    "IndustryId": 3
+  }
+]

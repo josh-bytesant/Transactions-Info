@@ -11,6 +11,7 @@ namespace Transactions.Info.Core.Entities.Encryption
     {
         [Key]
         public string UserName { get; set; }
+        [Required]
         public string Key { get; set; }
     }
 }

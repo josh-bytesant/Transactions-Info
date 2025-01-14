@@ -18,6 +18,9 @@ namespace Transactions.Info.Infrastructure.Data.DBContexts
 
         public DbSet<APILogin> Logins { get; set; }
         public DbSet<ApplicationUserKey> ApplicationUserKeys { get; set; }
+        
+        public DbSet<IndustryField> IndustryFields { get; set; }
         public DbSet<CustomerAccountInfo> CustomerAccounts { get; set; }
+        public DbSet<Industry> Industries { get; set; }
     }
 }

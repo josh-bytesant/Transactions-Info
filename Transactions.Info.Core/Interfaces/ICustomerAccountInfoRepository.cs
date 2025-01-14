@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Transactions.Info.Core.DTOs;
 using Transactions.Info.Core.Entities.Common;
 
 namespace Transactions.Info.Core.Interfaces
 {
     public interface ICustomerAccountInfoRepository
     {
-        Task<CustomerAccountInfo> GetCustomerAccountInfoAsync(string accountNumber);
-        Task<CustomerAccountInfo> GetCustomerAccountInfoByIndustryAsync(string industry);
-        Task<IReadOnlyList<string>> GetCustomerAccountIndustries();
+        Task<GenericResponseDTO<string>> GetCustomerAccountInfoAsync(string accountNumber);
+        Task<GenericResponseDTO<string>> GetAllCustomerAccountInfoAsync();
     }
 }
