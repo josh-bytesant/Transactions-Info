@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Transactions.Info.Core.DTOs;
 using Transactions.Info.Core.Interfaces;
 using Transactions.Info.Infrastructure.Data.Implementations;
 
@@ -37,6 +38,22 @@ namespace Transactions.Info.Extra.API.Controllers
             
         }
 
-        
+        [HttpPost]
+        public async Task<IActionResult> UpdateCustomerAccountIndustry(UpdateCustomerAccountIndustryDTO model)
+        {
+            try
+            {
+                var result = await _accountInfoRepo.UpdateCustomerAccountIndustryAsync(model);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"{e.Message} => {e.StackTrace}");
+                return BadRequest("An error occurred");
+            }
+
+        }
+
+
     }
 }

@@ -12,5 +12,6 @@ namespace Transactions.Info.Core.Interfaces
     {
         Task<GenericResponseDTO<string>> GetCustomerAccountInfoAsync(string accountNumber);
         Task<GenericResponseDTO<string>> GetAllCustomerAccountInfoAsync();
+        Task<GenericResponseDTO<string>> UpdateCustomerAccountIndustryAsync(UpdateCustomerAccountIndustryDTO updateCustomerAccountIndustry);
     }
 }

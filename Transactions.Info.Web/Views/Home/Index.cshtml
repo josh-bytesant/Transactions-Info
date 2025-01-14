@@ -1,9 +1,54 @@
 ﻿@model Transactions.Info.Web.Models.AccountInfoDTO
 @{
     ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row p-2">
+    <div class="card col-12">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-4">
+                    <div class="col fw-bold">
+                        Account No
+                    </div>
+                    <div class="col">
+                        @Model.AccountNumber
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="col fw-bold">
+                        Industry
+                    </div>
+                    <div class="col">
+                        @Model.Industry.Name
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+
+</div>
+
+<div class="row p-2">
+     <form id="create-additional-info-form" asp-action="Create">
+        @foreach (var item in Model.Industry.IndustryFields)
+        {
+            <div class="form-group row mt-3">
+                <label class="col-md-2 fw-bold">@Html.Raw(item.Field)</label>
+                <div class="col-md-5"><input name="@Html.Raw(item.Field)" class="form-control" /></div>
+            </div>
+
+            
+        }
+        <div class="gorm-group row my-5 justify-content-center">
+            <div class="col-sm-1">
+                <button type="submit" class="btn btn-outline-primary">Submit</button>
+            </div>
+
+        </div>
+      </form>
+    
 </div>

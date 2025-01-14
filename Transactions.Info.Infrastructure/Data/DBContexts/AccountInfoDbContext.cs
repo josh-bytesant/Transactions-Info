@@ -22,5 +22,10 @@ namespace Transactions.Info.Infrastructure.Data.DBContexts
         public DbSet<IndustryField> IndustryFields { get; set; }
         public DbSet<CustomerAccountInfo> CustomerAccounts { get; set; }
         public DbSet<Industry> Industries { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        }
     }
 }

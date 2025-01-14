@@ -43,5 +43,17 @@ namespace Transactions.Info.Infrastructure.Data.Implementations
             var data = _crypto.Encrypt(dbResult.SerializeThis(), _userContext.CurrrentUser);
             return new GenericResponseDTO<string> { Status = true, Message = "Success", Data = data };
         }
+
+        public async Task<GenericResponseDTO<string>> UpdateCustomerAccountIndustryAsync(UpdateCustomerAccountIndustryDTO model)
+        {
+            var customerAccountInfo = _dbContext.CustomerAccounts.FirstOrDefault(a => a.AccountNumber == model.AccountNumber);
+            if (customerAccountInfo == null) return new GenericResponseDTO<string> { Message = "No record found for account number" };
+
+            customerAccountInfo.IndustryId = model.IndustryId;
+            _dbContext.Attach(customerAccountInfo);
+            _dbContext.Entry(customerAccountInfo).Property("IndustryId").IsModified = true;
+            await _dbContext.SaveChangesAsync();
+            return new GenericResponseDTO<string> { Status = true, Message = "Success" };
+        }
     }
 }
