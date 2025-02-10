@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Transactions.Info.Core.Interfaces;
@@ -19,7 +20,8 @@ namespace Transactions.Info.Infrastructure.ConfigureServices
         {
             services.AddDbContext<AccountInfoDbContext>(opt =>
             {
-                opt.UseSqlServer(configuration.GetConnectionString("AccountInfoConnection"));
+                opt.UseSqlServer(configuration.GetConnectionString("AccountInfoConnection"),
+                     b => b.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name));
             });
             services.AddScoped<AESCryptography>();
             services.AddScoped<UserContextRepository>();

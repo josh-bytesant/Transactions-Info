@@ -56,6 +56,9 @@ namespace Transactions.Info.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AccountNumber")
+                        .IsUnique();
+
                     b.HasIndex("IndustryId");
 
                     b.ToTable("CustomerAccounts");

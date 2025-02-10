@@ -11,8 +11,8 @@ using Transactions.Info.Infrastructure.Data.DBContexts;
 namespace Transactions.Info.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AccountInfoDbContext))]
-    [Migration("20250113234913_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250127173617_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,6 +57,9 @@ namespace Transactions.Info.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountNumber")
+                        .IsUnique();
 
                     b.HasIndex("IndustryId");
 

@@ -4,7 +4,7 @@
 
 namespace Transactions.Info.Infrastructure.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -84,6 +84,12 @@ namespace Transactions.Info.Infrastructure.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerAccounts_Account Number",
+                table: "CustomerAccounts",
+                column: "Account Number",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_CustomerAccounts_IndustryId",

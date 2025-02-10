@@ -54,24 +54,25 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    
+}
+app.UseSwagger();
+app.UseSwaggerUI();
 
-    using var scope = app.Services.CreateScope();
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<AccountInfoDbContext>();
-    var logger = services.GetRequiredService<ILogger<Program>>();
-    try
-    {
-        await context.Database.MigrateAsync();
-        await AccountInfoContextSeed.SeedAsync(context);
-        AccountInfoComplexDataSeed.Initialize(context);
-    }
-    catch (System.Exception ex)
-    {
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<AccountInfoDbContext>();
+var logger = services.GetRequiredService<ILogger<Program>>();
+try
+{
+    await context.Database.MigrateAsync();
+    await AccountInfoContextSeed.SeedAsync(context);
+    AccountInfoComplexDataSeed.Initialize(context);
+}
+catch (System.Exception ex)
+{
 
-        logger.LogError(ex, "An error occuredduring migraion");
-    }
+    logger.LogError(ex, "An error occuredduring migraion");
 }
 
 app.UseHttpsRedirection();

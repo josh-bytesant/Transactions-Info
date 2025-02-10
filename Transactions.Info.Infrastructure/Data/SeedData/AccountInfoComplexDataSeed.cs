@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,8 @@ namespace Transactions.Info.Infrastructure.Data.SeedData
     {
         public static void Initialize(AccountInfoDbContext context)
         {
-            if(!context.Industries.Any())
+            
+            if (!context.Industries.Any())
             {
                 var industries = new List<Industry>
             {
